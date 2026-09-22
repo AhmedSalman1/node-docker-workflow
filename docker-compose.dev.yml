@@ -5,6 +5,8 @@ services:
       target: development
     environment:
       - NODE_ENV=development
+    depends_on:
+      - mongo
     develop:
       # Compose Watch: auto-update running container on file save.
       # Run with: docker compose -f docker-compose.dev.yml up --watch --build
@@ -19,3 +21,17 @@ services:
           action: rebuild
         - path: ./package-lock.json
           action: rebuild
+
+  mongo:
+    image: mongo:8
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

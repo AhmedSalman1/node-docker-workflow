@@ -54,3 +54,11 @@
 ### Skip `--build` (plain `up`)
 
 - Only `./src` changed (watch + nodemon handles it), plain restart after `down`
+
+---
+
+# MongoDB
+
+### Connect to MongoDB
+
+- docker exec -it container name mongosh -u username -p password
