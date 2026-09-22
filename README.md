@@ -57,8 +57,18 @@
 
 ---
 
-# MongoDB
+# PostgreSQL + pgAdmin
 
-### Connect to MongoDB
+### Connect to PostgreSQL
 
-- docker exec -it container name mongosh -u username -p password
+- docker exec -it <postgres-container> psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+- Host port: `5433` -> container `5432`
+
+### pgAdmin (dev only)
+
+- URL: http://localhost:5050 (login with `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` from `.env`)
+- Register server: Host `postgres`, Port `5432`, User/Password from `.env`, DB from `POSTGRES_DB`
+
+### DB health check
+
+- curl http://localhost:4000/health/db
