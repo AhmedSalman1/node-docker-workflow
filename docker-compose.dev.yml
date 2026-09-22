@@ -1,13 +1,7 @@
 services:
   node-app:
-    container_name: express-node-app-container
-    build: .
-    ports:
-      - "4000:4000"
     environment:
       - NODE_ENV=development
-    env_file:
-      - ./.env
     develop:
       # Compose Watch: auto-update running container on file save.
       # Run with: docker compose -f docker-compose.dev.yml up --watch --build
@@ -23,6 +17,11 @@ services:
         - path: ./package-lock.json
           action: rebuild
 
+# Now
 # - Detached workflow is two terminals / two commands:
+# 1. docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+# 2. docker-compose -f docker-compose.yml -f docker-compose.dev.yml watch
+
+# Old
 # 1. docker compose -f docker-compose.dev.yml up -d --build
 # 2. docker compose -f docker-compose.dev.yml watch — keep this running; it does the sync/rebuild.
