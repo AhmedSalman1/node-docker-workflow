@@ -1,5 +1,8 @@
 services:
   node-app:
+    build:
+      context: .
+      target: development
     environment:
       - NODE_ENV=development
     develop:
@@ -16,12 +19,3 @@ services:
           action: rebuild
         - path: ./package-lock.json
           action: rebuild
-
-# Now
-# - Detached workflow is two terminals / two commands:
-# 1. docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-# 2. docker-compose -f docker-compose.yml -f docker-compose.dev.yml watch
-
-# Old
-# 1. docker compose -f docker-compose.dev.yml up -d --build
-# 2. docker compose -f docker-compose.dev.yml watch — keep this running; it does the sync/rebuild.
