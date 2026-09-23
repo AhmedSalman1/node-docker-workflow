@@ -1,0 +1,63 @@
+# Name of the GitHub Actions workflow
+name: CI
+
+# Triggers for the workflow execution
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Define default security permissions for the workflow
+permissions:
+  contents: read
+
+# List of jobs to execute in this workflow
+jobs:
+  # First job: handles the test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Clone the repository code into the runner
+      - name: Checkout code
+        # Official Action to check out repository code
+        uses: actions/checkout@v7.0.1
+
+      # Step 2: Configure the Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      # Step 3: Clean install project dependencies based on package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Execute unit and integration tests
+      - name: Run tests
+        run: npm test
+
+  # Second job: validates production Docker build
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4.4.1
+
+      - name: Build production target
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          target: production
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
